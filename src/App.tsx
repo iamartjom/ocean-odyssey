@@ -919,6 +919,8 @@ const OceanDetailsSection = () => {
           <source src="https://res.cloudinary.com/dlarfzczb/video/upload/v1775417600/animate_image_without_202604042316_nyo6jy.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/60 to-transparent h-[40vh]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent h-[40vh] top-auto" />
       </div>
 
       <div className="relative z-10 w-full max-w-7xl flex flex-col items-center text-center">
@@ -998,6 +1000,8 @@ const ScubaDivingSection = () => {
         />
         <div className="absolute inset-0 bg-blue-900/10" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-black/60 to-transparent h-[40vh]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent h-[40vh] top-auto" />
       </div>
 
       <div className="relative z-10 w-full flex flex-col lg:flex-row items-center justify-between px-12 lg:px-24">
