@@ -581,9 +581,85 @@ const NewsEventsPage = ({ onBack }: { onBack: () => void }) => {
   );
 };
 
+const MenuOverlay = ({ 
+  isOpen, 
+  onClose, 
+  onNavigate 
+}: { 
+  isOpen: boolean; 
+  onClose: () => void; 
+  onNavigate: (view: "home" | "mitmachen" | "science" | "discoveries" | "news") => void 
+}) => {
+  const menuItems = [
+    { id: "home", label: "ÜBER UNS" },
+    { id: "mitmachen", label: "MITMACHEN" },
+    { id: "science", label: "WISSENSCHAFTSNETZWERK" },
+    { id: "discoveries", label: "ENTDECKUNGEN" },
+    { id: "news", label: "NEWS & EVENTS" }
+  ];
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0, x: "100%" }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: "100%" }}
+          transition={{ duration: 0.6, ease: [0.76, 0, 0.24, 1] }}
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-2xl flex flex-col items-center justify-center p-8 text-center"
+        >
+          <div className="absolute top-8 right-8 flex items-center gap-4">
+            <span className="text-[10px] font-bold tracking-[0.3em] text-gray-500 uppercase hidden sm:block">Schließen</span>
+            <button 
+              onClick={onClose}
+              className="p-4 rounded-full bg-white/10 hover:bg-white/20 transition-all border border-white/10 group"
+            >
+              <X size={24} className="group-hover:rotate-90 transition-transform duration-300" />
+            </button>
+          </div>
+
+          <div className="flex flex-col items-center gap-6 lg:gap-8">
+            {menuItems.map((item, index) => (
+              <motion.button
+                key={item.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 * index + 0.3 }}
+                onClick={() => {
+                  onNavigate(item.id as any);
+                  onClose();
+                }}
+                className="group relative"
+              >
+                <span className="text-4xl lg:text-7xl font-display font-bold tracking-tighter hover:text-blue-400 transition-all duration-500 uppercase block">
+                  {item.label}
+                </span>
+                <span className="absolute -left-8 top-1/2 -translate-y-1/2 text-[10px] font-bold text-blue-500 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  0{index + 1}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+
+          <div className="absolute bottom-12 flex flex-col items-center gap-4">
+            <div className="w-12 h-[1px] bg-white/20 mb-4" />
+            <div className="flex gap-8">
+              <Instagram size={20} className="text-gray-500 hover:text-white transition-colors cursor-pointer" />
+              <Facebook size={20} className="text-gray-500 hover:text-white transition-colors cursor-pointer" />
+              <Twitter size={20} className="text-gray-500 hover:text-white transition-colors cursor-pointer" />
+            </div>
+            <p className="text-[8px] tracking-[0.5em] text-gray-600 uppercase mt-4">Ocean Odyssey © 2026</p>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [currentView, setCurrentView] = useState<"home" | "mitmachen" | "science" | "discoveries" | "news">("home");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     // Simulate loading time
@@ -598,6 +674,12 @@ export default function App() {
       <AnimatePresence mode="wait">
         {loading && <Preloader key="preloader" />}
       </AnimatePresence>
+
+      <MenuOverlay 
+        isOpen={isMenuOpen} 
+        onClose={() => setIsMenuOpen(false)} 
+        onNavigate={setCurrentView} 
+      />
 
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
@@ -629,7 +711,10 @@ export default function App() {
           <button className="px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-medium tracking-widest hover:bg-white/20 transition-all">
             KONTAKTIEREN SIE UNS •
           </button>
-          <button className="px-6 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] font-medium tracking-widest flex items-center gap-2 hover:bg-white/30 transition-all">
+          <button 
+            onClick={() => setIsMenuOpen(true)}
+            className="px-6 py-3 rounded-full bg-white/20 backdrop-blur-md border border-white/20 text-[10px] font-medium tracking-widest flex items-center gap-2 hover:bg-white/30 transition-all"
+          >
             MENÜ <MoreHorizontal size={14} />
           </button>
         </div>
