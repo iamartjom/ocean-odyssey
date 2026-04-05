@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "motion/react";
-import { Facebook, Instagram, Twitter, ArrowLeft, ArrowRight, MoreHorizontal, X, Anchor, Camera, Microscope, Waves } from "lucide-react";
+import { Facebook, Instagram, Twitter, ArrowLeft, ArrowRight, ArrowDown, MoreHorizontal, X, Anchor, Camera, Microscope, Waves } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const Logo = ({ className = "", onClick }: { className?: string; onClick?: () => void }) => (
@@ -670,7 +670,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-hidden relative">
+    <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black overflow-y-auto overflow-x-hidden relative scroll-smooth">
       <AnimatePresence mode="wait">
         {loading && <Preloader key="preloader" />}
       </AnimatePresence>
@@ -681,25 +681,13 @@ export default function App() {
         onNavigate={setCurrentView} 
       />
 
-      {/* Background Video */}
-      <div className="absolute inset-0 z-0">
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline 
-          className="w-full h-full object-cover opacity-60"
-        >
-          <source src="https://res.cloudinary.com/dlarfzczb/video/upload/v1775330465/Animate_image_without_202604042120_bbtoyj.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/60" />
-      </div>
-
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-50 px-8 py-6 flex items-center justify-between">
-        <Logo onClick={() => setCurrentView("home")} />
+      <nav className="fixed top-0 left-0 w-full z-50 px-8 py-6 flex items-center justify-between pointer-events-none">
+        <div className="pointer-events-auto">
+          <Logo onClick={() => setCurrentView("home")} />
+        </div>
         
-        <div className="hidden lg:flex items-center gap-8 text-[10px] font-medium tracking-[0.2em] text-gray-400">
+        <div className="hidden lg:flex items-center gap-8 text-[10px] font-medium tracking-[0.2em] text-gray-400 pointer-events-auto">
           <button onClick={() => setCurrentView("home")} className={`hover:text-white transition-colors ${currentView === "home" ? "text-white" : ""}`}>ÜBER UNS</button>
           <button onClick={() => setCurrentView("mitmachen")} className={`hover:text-white transition-colors ${currentView === "mitmachen" ? "text-white" : ""}`}>MITMACHEN</button>
           <button onClick={() => setCurrentView("science")} className={`hover:text-white transition-colors ${currentView === "science" ? "text-white" : ""}`}>WISSENSCHAFTSNETZWERK</button>
@@ -707,7 +695,7 @@ export default function App() {
           <button onClick={() => setCurrentView("news")} className={`hover:text-white transition-colors ${currentView === "news" ? "text-white" : ""}`}>NEWS & EVENTS</button>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 pointer-events-auto">
           <button className="px-6 py-3 rounded-full bg-white/10 backdrop-blur-md border border-white/10 text-[10px] font-medium tracking-widest hover:bg-white/20 transition-all">
             KONTAKTIEREN SIE UNS •
           </button>
@@ -736,155 +724,371 @@ export default function App() {
       </AnimatePresence>
 
       {/* Hero Section */}
-      <main className={`relative z-10 h-screen flex flex-col items-end justify-start pt-48 px-12 lg:px-24 transition-opacity duration-500 ${currentView !== "home" ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
-        <div className="relative w-full max-w-4xl">
-          <motion.div 
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
-            className="flex flex-col items-end"
+      <section className="relative h-screen flex flex-col items-end justify-start pt-48 px-12 lg:px-24">
+        {/* Background Video (Hero Only) */}
+        <div className="absolute inset-0 z-0">
+          <video 
+            autoPlay 
+            loop 
+            muted 
+            playsInline 
+            className="w-full h-full object-cover opacity-60"
           >
-            <div className="flex items-center leading-none">
-              <CustomO className="w-[12vw] h-[12vw] max-w-[160px] max-h-[160px] mr-4" />
-              <h1 className="text-[10vw] lg:text-[7rem] font-display font-bold tracking-tighter leading-none">
-                CEAN
-              </h1>
-            </div>
-            
-            <div className="flex flex-col items-end -mt-3 lg:-mt-6">
-              <h2 className="text-[4vw] lg:text-[3rem] font-display font-bold tracking-tighter leading-none">
-                ODYSSEY
-              </h2>
-              <p className="mt-4 max-w-xs text-right text-[10px] lg:text-sm text-gray-300 font-light leading-relaxed opacity-80">
-                Wir lassen Ihre Träume von <br />
-                Unterwasserabenteuern <br />
-                Wirklichkeit werden.
-              </p>
-            </div>
-          </motion.div>
+            <source src="https://res.cloudinary.com/dlarfzczb/video/upload/v1775330465/Animate_image_without_202604042120_bbtoyj.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
         </div>
-      </main>
 
-      {/* Mission Section */}
-      <motion.div 
-        initial={{ opacity: 0, x: -50 }}
-        animate={currentView === "home" ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-        transition={{ duration: 1, delay: 0.7 }}
-        className="fixed left-12 lg:left-24 top-1/2 -translate-y-1/2 z-20 hidden md:block"
-      >
-        <div className="flex items-start gap-6">
-          <div className="w-[1px] h-48 bg-gradient-to-b from-blue-500 via-blue-500/50 to-transparent" />
-          <div className="space-y-6 max-w-sm">
-            <div className="space-y-2">
-              <span className="text-[10px] font-bold tracking-[0.4em] text-blue-400 uppercase">Pioniergeist</span>
-              <h3 className="text-3xl lg:text-4xl font-display font-bold leading-tight tracking-tighter">
-                Forschung ohne <br /> Kompromisse.
-              </h3>
-            </div>
-            <p className="text-sm text-gray-400 font-light leading-relaxed">
-              Ocean Odyssey steht für die Verbindung von High-End-Expeditionen und ernsthafter Meeresforschung. Wir öffnen die Tore zur Tiefsee für diejenigen, die mehr als nur eine Reise suchen – wir suchen Erkenntnis.
-            </p>
-            <div className="flex gap-8 pt-4">
-              <div className="flex flex-col">
-                <span className="text-2xl font-display font-bold">11.000m</span>
-                <span className="text-[8px] text-gray-500 uppercase tracking-widest">Max. Tiefe</span>
+        <main className={`relative z-10 w-full h-full flex flex-col items-end justify-start transition-opacity duration-500 ${currentView !== "home" ? "opacity-0 pointer-events-none" : "opacity-100"}`}>
+          <div className="relative w-full max-w-4xl">
+            <motion.div 
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="flex flex-col items-end"
+            >
+              <div className="flex items-center leading-none">
+                <CustomO className="w-[12vw] h-[12vw] max-w-[160px] max-h-[160px] mr-4" />
+                <h1 className="text-[10vw] lg:text-[7rem] font-display font-bold tracking-tighter leading-none">
+                  CEAN
+                </h1>
               </div>
-              <div className="flex flex-col">
-                <span className="text-2xl font-display font-bold">100%</span>
-                <span className="text-[8px] text-gray-500 uppercase tracking-widest">Nachhaltig</span>
+              
+              <div className="flex flex-col items-end -mt-3 lg:-mt-6">
+                <h2 className="text-[4vw] lg:text-[3rem] font-display font-bold tracking-tighter leading-none">
+                  ODYSSEY
+                </h2>
+                <p className="mt-4 max-w-xs text-right text-[10px] lg:text-sm text-gray-300 font-light leading-relaxed opacity-80">
+                  Wir lassen Ihre Träume von <br />
+                  Unterwasserabenteuern <br />
+                  Wirklichkeit werden.
+                </p>
               </div>
-            </div>
+            </motion.div>
           </div>
-        </div>
-      </motion.div>
 
-      {/* Live Status Bar */}
-      <motion.div 
-        initial={{ opacity: 0, y: 50 }}
-        animate={currentView === "home" ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-        transition={{ duration: 1, delay: 0.9 }}
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 z-20 hidden lg:block"
-      >
-        <div className="px-8 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/5 flex items-center gap-8">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            <span className="text-[9px] font-bold tracking-widest text-gray-400 uppercase">Systeme: Online</span>
-          </div>
-          <div className="w-[1px] h-4 bg-white/10" />
-          <div className="flex items-center gap-4">
-             <span className="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Aktuelle Position:</span>
-             <span className="text-[9px] font-mono text-blue-400 tracking-wider">18.2482° N, 64.4412° W</span>
-          </div>
-          <div className="w-[1px] h-4 bg-white/10" />
-          <div className="flex items-center gap-4">
-             <span className="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Wassertemperatur:</span>
-             <span className="text-[9px] font-mono text-blue-400 tracking-wider">4.2°C (1200m)</span>
-          </div>
-        </div>
-      </motion.div>
+          <MissionSection currentView={currentView} />
+          <LiveStatusBar currentView={currentView} />
+          <BottomLeftCard currentView={currentView} />
+          <BottomRightSocials currentView={currentView} />
+        </main>
+      </section>
 
-      {/* Bottom Left Card */}
-      <motion.div 
-        initial={{ opacity: 0, x: -50 }}
-        animate={currentView === "home" ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="fixed bottom-8 left-8 w-full max-w-sm z-20"
-      >
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-4 flex gap-4 items-center">
-          <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
-            <img 
-              src="https://images.unsplash.com/photo-1518144591331-17a5dd71c477?auto=format&fit=crop&q=80&w=400" 
-              alt="Whale" 
-              className="w-full h-full object-cover"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-          <div className="flex flex-col gap-1">
-            <span className="text-[10px] font-bold text-gray-500">01.</span>
-            <h3 className="text-sm font-bold">Experten-Guides</h3>
-            <p className="text-[10px] text-gray-400 leading-tight line-clamp-3">
-              Unser erfahrenes Team aus Meeresbiologen und zertifizierten Tauchern garantiert eine fesselnde und informative Reise unter die Wellen.
-            </p>
-            <div className="flex items-center justify-between mt-2">
-              <div className="flex gap-1">
-                <div className="w-2 h-2 rounded-full bg-white" />
-                <div className="w-2 h-2 rounded-full bg-white/20" />
-                <div className="w-2 h-2 rounded-full bg-white/20" />
-              </div>
-              <div className="flex gap-2">
-                <button className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
-                  <ArrowLeft size={12} />
-                </button>
-                <button className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
-                  <ArrowRight size={12} />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-
-      {/* Bottom Right Socials */}
-      <motion.div 
-        initial={{ opacity: 0, x: 50 }}
-        animate={currentView === "home" ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-        transition={{ duration: 1, delay: 0.5 }}
-        className="fixed bottom-8 right-8 z-20"
-      >
-        <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 flex items-center gap-6">
-          <a href="#" className="text-gray-400 hover:text-white transition-colors">
-            <Facebook size={16} />
-          </a>
-          <a href="#" className="text-gray-400 hover:text-white transition-colors">
-            <Instagram size={16} />
-          </a>
-          <a href="#" className="text-gray-400 hover:text-white transition-colors">
-            <Twitter size={16} />
-          </a>
-          <div className="w-1 h-1 rounded-full bg-gray-600" />
-        </div>
-      </motion.div>
-
+      {currentView === "home" && <OceanDetailsSection />}
+      {currentView === "home" && <ScubaDivingSection />}
     </div>
   );
 }
+
+const MissionSection = ({ currentView }: { currentView: string }) => (
+  <motion.div 
+    initial={{ opacity: 0, x: -50 }}
+    animate={currentView === "home" ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+    transition={{ duration: 1, delay: 0.7 }}
+    className="absolute left-12 lg:left-24 top-1/2 -translate-y-1/2 z-20 hidden md:block"
+  >
+    <div className="flex items-start gap-6">
+      <div className="w-[1px] h-48 bg-gradient-to-b from-blue-500 via-blue-500/50 to-transparent" />
+      <div className="space-y-6 max-w-sm">
+        <div className="space-y-2 text-left">
+          <span className="text-[10px] font-bold tracking-[0.4em] text-blue-400 uppercase">Pioniergeist</span>
+          <h3 className="text-3xl lg:text-4xl font-display font-bold leading-tight tracking-tighter">
+            Forschung ohne <br /> Kompromisse.
+          </h3>
+        </div>
+        <p className="text-sm text-gray-400 font-light leading-relaxed text-left">
+          Ocean Odyssey steht für die Verbindung von High-End-Expeditionen und ernsthafter Meeresforschung. Wir öffnen die Tore zur Tiefsee für diejenigen, die mehr als nur eine Reise suchen – wir suchen Erkenntnis.
+        </p>
+        <div className="flex gap-8 pt-4">
+          <div className="flex flex-col items-start">
+            <span className="text-2xl font-display font-bold">11.000m</span>
+            <span className="text-[8px] text-gray-500 uppercase tracking-widest">Max. Tiefe</span>
+          </div>
+          <div className="flex flex-col items-start">
+            <span className="text-2xl font-display font-bold">100%</span>
+            <span className="text-[8px] text-gray-500 uppercase tracking-widest">Nachhaltig</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const LiveStatusBar = ({ currentView }: { currentView: string }) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 50 }}
+    animate={currentView === "home" ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+    transition={{ duration: 1, delay: 0.9 }}
+    className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden lg:block"
+  >
+    <div className="px-8 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/5 flex items-center gap-8">
+      <div className="flex items-center gap-2">
+        <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+        <span className="text-[9px] font-bold tracking-widest text-gray-400 uppercase">Systeme: Online</span>
+      </div>
+      <div className="w-[1px] h-4 bg-white/10" />
+      <div className="flex items-center gap-4">
+         <span className="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Aktuelle Position:</span>
+         <span className="text-[9px] font-mono text-blue-400 tracking-wider">18.2482° N, 64.4412° W</span>
+      </div>
+      <div className="w-[1px] h-4 bg-white/10" />
+      <div className="flex items-center gap-4">
+         <span className="text-[9px] font-bold tracking-widest text-gray-500 uppercase">Wassertemperatur:</span>
+         <span className="text-[9px] font-mono text-blue-400 tracking-wider">4.2°C (1200m)</span>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const BottomLeftCard = ({ currentView }: { currentView: string }) => (
+  <motion.div 
+    initial={{ opacity: 0, x: -50 }}
+    animate={currentView === "home" ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
+    transition={{ duration: 1, delay: 0.5 }}
+    className="absolute bottom-8 left-8 w-full max-w-sm z-20"
+  >
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-4 flex gap-4 items-center">
+      <div className="w-24 h-24 rounded-2xl overflow-hidden flex-shrink-0">
+        <img 
+          src="https://images.unsplash.com/photo-1518144591331-17a5dd71c477?auto=format&fit=crop&q=80&w=400" 
+          alt="Whale" 
+          className="w-full h-full object-cover"
+          referrerPolicy="no-referrer"
+        />
+      </div>
+      <div className="flex flex-col gap-1 text-left">
+        <span className="text-[10px] font-bold text-gray-500">01.</span>
+        <h3 className="text-sm font-bold">Experten-Guides</h3>
+        <p className="text-[10px] text-gray-400 leading-tight line-clamp-3">
+          Unser erfahrenes Team aus Meeresbiologen und zertifizierten Tauchern garantiert eine fesselnde und informative Reise unter die Wellen.
+        </p>
+        <div className="flex items-center justify-between mt-2">
+          <div className="flex gap-1">
+            <div className="w-2 h-2 rounded-full bg-white" />
+            <div className="w-2 h-2 rounded-full bg-white/20" />
+            <div className="w-2 h-2 rounded-full bg-white/20" />
+          </div>
+          <div className="flex gap-2">
+            <button className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+              <ArrowLeft size={12} />
+            </button>
+            <button className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+              <ArrowRight size={12} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
+
+const BottomRightSocials = ({ currentView }: { currentView: string }) => (
+  <motion.div 
+    initial={{ opacity: 0, x: 50 }}
+    animate={currentView === "home" ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
+    transition={{ duration: 1, delay: 0.5 }}
+    className="absolute bottom-8 right-8 z-20"
+  >
+    <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-full px-6 py-3 flex items-center gap-6">
+      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+        <Facebook size={16} />
+      </a>
+      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+        <Instagram size={16} />
+      </a>
+      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+        <Twitter size={16} />
+      </a>
+      <div className="w-1 h-1 rounded-full bg-gray-600" />
+    </div>
+  </motion.div>
+);
+
+const OceanDetailsSection = () => {
+  return (
+    <section className="relative min-h-[140vh] lg:min-h-screen flex flex-col items-center justify-center py-20 px-8 lg:px-24 overflow-hidden">
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0 scale-110">
+        <video 
+          autoPlay 
+          loop 
+          muted 
+          playsInline 
+          className="w-full h-full object-cover"
+        >
+          <source src="https://res.cloudinary.com/dlarfzczb/video/upload/v1775417600/animate_image_without_202604042316_nyo6jy.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/60" />
+      </div>
+
+      <div className="relative z-10 w-full max-w-7xl flex flex-col items-center text-center">
+        <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            viewport={{ once: true }}
+            className="mb-12 lg:mb-24"
+        >
+            <span className="text-[10px] font-bold tracking-[0.6em] text-blue-400 uppercase mb-8 block opacity-80">TEAM</span>
+            <h2 className="text-[14vw] lg:text-[9rem] font-display font-bold tracking-tighter leading-[0.85] mb-8">
+                Blue <br className="lg:hidden" /> ocean.
+            </h2>
+            <div className="flex flex-col items-center gap-2">
+                <span className="text-2xl lg:text-4xl font-display font-bold tracking-[0.2em] text-white/90">HAKIM</span>
+                <span className="text-[10px] tracking-[0.4em] text-white/30 uppercase mt-2">All rights reserved</span>
+            </div>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div 
+            animate={{ y: [0, 15, 0] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            className="mb-16 lg:mb-32"
+        >
+            <div className="w-12 h-12 rounded-full bg-white/5 backdrop-blur-md border border-white/10 flex items-center justify-center group cursor-pointer hover:bg-white/10 transition-colors">
+                <ArrowDown size={20} className="text-white/60 group-hover:text-blue-400 transition-colors" />
+            </div>
+        </motion.div>
+
+        {/* Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-10 w-full">
+            {[
+                { num: "01", title: "250 Nachrichten wöchentlich", desc: "Detaillierte Berichte über den Fortschritt und neue Entdeckungen." },
+                { num: "02", title: "Einhaltung aller Aufgaben", desc: "Absolute Transparenz bei der Durchführung unserer Missionen." },
+                { num: "03", title: "Nichts Persönliches", desc: "Fokus auf wissenschaftliche Exzellenz und den Schutz der Meere." }
+            ].map((card, i) => (
+                <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 40 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                    viewport={{ once: true }}
+                    className="relative group p-10 lg:p-14 rounded-[3rem] bg-white/5 backdrop-blur-3xl border border-white/10 hover:bg-white/[0.08] transition-all duration-700 overflow-hidden text-left"
+                >
+                    <div className="flex flex-col relative z-10">
+                        <span className="text-4xl lg:text-5xl font-display font-bold mb-8 text-white/20 group-hover:text-blue-500/50 transition-colors duration-700">
+                           {card.num}
+                        </span>
+                        <h3 className="text-xl lg:text-2xl font-bold mb-4 tracking-tight leading-tight">
+                            {card.title}
+                        </h3>
+                        <p className="text-sm lg:text-base text-gray-400 font-light leading-relaxed">
+                            {card.desc}
+                        </p>
+                    </div>
+                    {/* Decorative element */}
+                    <div className="absolute right-0 bottom-0 w-32 h-32 bg-blue-500/5 blur-[80px] group-hover:bg-blue-500/20 transition-all duration-700" />
+                </motion.div>
+            ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const ScubaDivingSection = () => {
+  return (
+    <section className="relative min-h-[140vh] lg:min-h-screen flex items-center justify-between overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="/scuba-bg.png" 
+          alt="Scuba diving background" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-blue-900/10" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-transparent to-black/40" />
+      </div>
+
+      <div className="relative z-10 w-full flex flex-col lg:flex-row items-center justify-between px-12 lg:px-24">
+        {/* Left Side: Large Text */}
+        <motion.div
+          initial={{ opacity: 0, x: -100 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          viewport={{ once: true }}
+          className="flex flex-col items-start"
+        >
+          <div className="flex flex-col leading-[0.8] mb-8">
+            <h2 className="text-[15vw] lg:text-[12rem] font-display font-medium tracking-tighter opacity-100 mb-0">
+              scuba
+            </h2>
+            <h2 className="text-[15vw] lg:text-[12rem] font-display font-bold tracking-tighter text-white opacity-100">
+              diving
+            </h2>
+          </div>
+          <motion.div 
+             initial={{ opacity: 0 }}
+             whileInView={{ opacity: 0.6 }}
+             transition={{ delay: 0.5, duration: 1 }}
+             viewport={{ once: true }}
+             className="flex flex-col items-start gap-1"
+          >
+             <span className="text-xl lg:text-3xl font-display font-bold tracking-widest text-white/90 uppercase">Game of Sea</span>
+             <div className="w-12 h-[1px] bg-blue-500 mt-2" />
+          </motion.div>
+        </motion.div>
+
+        {/* Right Side: Information Panel */}
+        <motion.div
+           initial={{ opacity: 0, x: 100 }}
+           whileInView={{ opacity: 1, x: 0 }}
+           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+           viewport={{ once: true }}
+           className="w-full lg:w-[450px] bg-white/[0.02] backdrop-blur-3xl border-l border-white/5 min-h-[60vh] lg:h-screen flex flex-col justify-center p-12 lg:p-16 gap-12"
+        >
+          {[
+            { 
+              num: "01", 
+              title: "Atemtechnik", 
+              desc: "Meistern Sie die Kunst der kontrollierten Atmung für längere Tauchgänge.", 
+              img: "https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&q=80&w=200" 
+            },
+            { 
+              num: "02", 
+              title: "Ausrüstung", 
+              desc: "Hochmoderne Tech-Gear für maximale Sicherheit in extremen Tiefen.", 
+              img: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&q=80&w=200" 
+            },
+            { 
+              num: "03", 
+              title: "Team-Support", 
+              desc: "Erfahrene Partner begleiten jede Expedition für höchste Sicherheit.", 
+              img: "https://images.unsplash.com/photo-1518467166778-b88f373ffec7?auto=format&fit=crop&q=80&w=200" 
+            }
+          ].map((item, i) => (
+            <motion.div 
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + i * 0.2, duration: 0.8 }}
+              viewport={{ once: true }}
+              className="flex items-center gap-6 group cursor-pointer"
+            >
+              <div className="relative flex-shrink-0">
+                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full overflow-hidden border-2 border-white/10 group-hover:border-blue-400 transition-colors duration-500">
+                  <img src={item.img} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
+                </div>
+                <span className="absolute -top-2 -right-2 text-[10px] font-bold text-blue-500 bg-white/10 backdrop-blur-md rounded-full w-6 h-6 flex items-center justify-center border border-white/10">
+                  {item.num}
+                </span>
+              </div>
+              <div className="flex flex-col text-left">
+                <h3 className="text-lg lg:text-xl font-bold mb-1 group-hover:text-blue-400 transition-colors">
+                   {item.title}
+                </h3>
+                <p className="text-xs lg:text-sm text-gray-400 font-light leading-relaxed">
+                   {item.desc}
+                </p>
+                <div className="mt-2 flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="text-[10px] font-bold tracking-widest text-blue-400 uppercase">Mehr erfahren</span>
+                  <div className="w-4 h-[1px] bg-blue-400" />
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
